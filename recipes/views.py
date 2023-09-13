@@ -6,11 +6,3 @@ def home(request):
     return render(request, 'recipes/home.html', {
         'name': 'Marcus'
     })
-
-
-def contato(request):
-    return HttpResponse('contato')
-
-
-def sobre(request):
-    return HttpResponse('sobre')
