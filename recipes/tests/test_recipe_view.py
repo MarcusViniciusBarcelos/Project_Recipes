@@ -1,11 +1,14 @@
-from django.test import TestCase
+from unittest import skip
+
 from django.urls import resolve, reverse
 
 from recipes import views
-from recipes.models import Category, Recipe, User
+
+from .test_recipe_base import RecipeTestBase
 
 
-class RecipeViewsTest(TestCase):
+class RecipeViewsTest(RecipeTestBase):
+
     def test_recipe_home_view_function_is_correct(self):
         view = resolve(reverse('recipes:home'))
         self.assertIs(view.func, views.home)
@@ -24,28 +27,7 @@ class RecipeViewsTest(TestCase):
                       response.content.decode('utf-8'))
 
     def test_recipe_home_template_loads_recipes(self):
-        category = Category.objects.create(name='categoria')
-        author = User.objects.create_user(
-            first_name='John',
-            last_name='Deeper',
-            username='username',
-            password='password',
-            email='email@deeper.com'
-        )
-        recipe = Recipe.objects.create(  # fixture - basicamente é um trecho de codigo que da suporte ao teste
-            category=category,
-            author=author,
-            title='Recipe title',
-            description='description',
-            slug='recipe-slug',
-            preparation_time=10,
-            preparation_time_unit='Minutos',
-            servings=5,
-            servings_unit='Porções',
-            preparation_steps='Recipe preparation steps',
-            preparation_steps_is_html=False,
-            is_published=True
-        )
+        self.make_recipe()
         response = self.client.get(reverse('recipes:home'))
         content = response.content.decode('utf-8')
         response_context_recipes = response.context['recipes']
