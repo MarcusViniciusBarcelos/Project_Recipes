@@ -1,8 +1,14 @@
-<div class="search-container">
-    <div class="container">
-        <form action="{% url 'recipes:search' %}" method="GET" class="search-form">
-            <input type="search" class="search-input" name="q" required>
-            <button type="submit" class="search-button"><i class="fas fa-search"></i></button>
-        </form>
+{% extends "global/base.html" %}
+{% block title %}{{ page_title }}{% endblock title %}
+
+{% block content %}
+    <div class="main-content container main-content-list">
+        {% for recipe in recipes %}
+            {% include "recipes/partials/recipe.html" %}
+        {% empty %}
+        <div class="center m-y">
+            <h1>No Recipes Found</h1>
+        </div>
+        {% endfor %}
     </div>
-</div>
+{% endblock content %}
