@@ -10,7 +10,7 @@ from utils.recipes.factory import make_recipe
 
 from .models import Recipe
 
-PER_PAGE = os.environ.get('PER_PAGE', 9)
+PER_PAGE = int(os.environ.get('PER_PAGE', 9))
 
 
 def home(request):
