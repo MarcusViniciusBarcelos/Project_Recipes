@@ -1,6 +1,9 @@
 import math
 
 from django.core.paginator import Paginator
+from django.db.models.query import QuerySet
+
+from recipes.models import Recipe
 
 
 def make_pagination_range(page_range, qty_pages, current_page):
@@ -39,7 +42,10 @@ def make_pagination(request, queryset, per_page, qty_pages=6):
     except ValueError:
         current_page = 1
 
-    paginator = Paginator(queryset, per_page)
+    if not isinstance(queryset, QuerySet):
+        queryset = Recipe.objects.order_by('-id')
+
+    paginator = Paginator(queryset.order_by('-id'), per_page)
     page_obj = paginator.get_page(current_page)
 
     pagination_range = make_pagination_range(
