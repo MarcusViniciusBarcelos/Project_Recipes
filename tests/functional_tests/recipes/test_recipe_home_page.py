@@ -34,7 +34,8 @@ class RecipeHomePageFunctionalTest(RecipeBaseFunctionalTest):
         )
 
         # clica nesse input e digita o termo de busca
-        # armazenado na variavel title_needed para encontrar a receita com esse titulo
+        #  para encontrar a receita com o titulo desejado
+
         search_input.send_keys(title_needed)
         search_input.send_keys(Keys.ENTER)
 
