@@ -2,11 +2,9 @@ from django.test import TestCase
 
 from recipes.models import Category, Recipe, User
 
+
 # fixture - basicamente é um trecho de codigo que da suporte ao teste
-
-
-class RecipeTestBase(TestCase):
-
+class RecipeMixin():
     def make_category(self, name='Categoria'):
         return Category.objects.create(name=name)
 
@@ -59,3 +57,20 @@ class RecipeTestBase(TestCase):
             preparation_steps_is_html=preparation_steps_is_html,
             is_published=is_published
         )
+
+    def make_recipe_in_batch(self, qtd=10):
+        recipes = []
+        for i in range(qtd):
+            kwargs = {
+                'author_data': {'username': f'u{i}'},
+                'slug': f'f{i}',
+                'title': f'Recipe title {i}'
+            }
+            recipe = self.make_recipe(**kwargs)
+            recipes.append(recipe)
+        return recipes
+
+
+class RecipeTestBase(TestCase, RecipeMixin):
+    def setUp(self) -> None:
+        return super().setUp()
