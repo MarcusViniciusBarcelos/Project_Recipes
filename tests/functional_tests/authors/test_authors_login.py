@@ -33,3 +33,58 @@ class AuthorsLoginTest(AuthorsBaseTest):
             f'You are logged in with { user.username }.',
             self.browser.find_element(By.TAG_NAME, 'body').text
         )
+
+    def test_login_create_raises_404_if_not_POST_method(self):
+        self.browser.get(
+            self.live_server_url +
+            reverse('authors:login_create')
+        )
+
+        self.assertIn(
+            'Not Found',
+            self.browser.find_element(By.TAG_NAME, 'body').text
+        )
+
+    def test_form_message_invalid_username_or_password(self):
+        # usuario abre a pagina de login
+        self.browser.get(self.live_server_url + reverse('authors:login'))
+
+        # usuario vê o formulario de login
+        form = self.browser.find_element(By.CLASS_NAME, 'main-form')
+
+        # tenta enviar valores vazios
+        username_field = form.find_element(
+            By.NAME, 'username').send_keys(' ')
+        password_field = form.find_element(
+            By.NAME, 'password').send_keys(' ')
+
+        # usuario envia o formulario de login
+        form.submit()
+
+        # vê uma mensagem de erro na tela
+        self.assertIn(
+            'Invalid username or password',
+            self.browser.find_element(By.TAG_NAME, 'body').text
+        )
+
+    def test_form_message_invalid_credentials(self):
+        # usuario abre a pagina de login
+        self.browser.get(self.live_server_url + reverse('authors:login'))
+
+        # usuario vê o formulario de login
+        form = self.browser.find_element(By.CLASS_NAME, 'main-form')
+
+        # tenta enviar usuario certo e a senha vazia
+        username_field = form.find_element(
+            By.NAME, 'username').send_keys('marcus')
+        password_field = form.find_element(
+            By.NAME, 'password').send_keys('testandodododo')
+
+        # usuario envia o formulario de login
+        form.submit()
+
+        # vê uma mensagem de erro na tela
+        self.assertIn(
+            'Invalid credentials',
+            self.browser.find_element(By.TAG_NAME, 'body').text
+        )
