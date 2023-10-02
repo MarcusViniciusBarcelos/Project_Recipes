@@ -1,9 +1,13 @@
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.shortcuts import redirect, render
 from django.urls import reverse
+
+from recipes.models import Recipe
+from utils.pagination import make_pagination, make_pagination_range
 
 from .forms import LoginForm, RegisterForm
 
@@ -87,4 +91,16 @@ def logout_view(request):
 
 @login_required(login_url='authors:login', redirect_field_name='next')
 def dashboard(request):
-    return render(request, 'authors/pages/dashboard.html')
+    recipes = Recipe.objects.filter(
+        is_published=False,
+        author=request.user
+    )
+    page_obj, pagination_range = make_pagination(request, recipes, 9)
+    return render(
+        request,
+        'authors/pages/dashboard.html',
+        context={
+            'recipes': page_obj,
+            'pagination_range': pagination_range,
+        }
+    )
