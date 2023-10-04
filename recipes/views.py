@@ -1,5 +1,4 @@
 import os
-from typing import Any
 
 from django.db.models import Q
 from django.http import Http404
