@@ -25,7 +25,7 @@ ssh IP_OU_HOST -i CAMINHO+NOME_DA_CHAVE
 
 ### Ao entrar no servidor
 
-A primeira coisa será atualizar tudo:
+##### A primeira coisa será atualizar tudo:
 
 ```
 sudo apt update -y
@@ -70,7 +70,7 @@ git config --global init.defaultBranch main
 
 ## Criando um repositório no servidor
 
-Um repositório bare é um repositório transitório (como se fosse um github).
+##### Um repositório bare é um repositório transitório (como se fosse um github)
 
 ```
 mkdir -p ~/app_bare
@@ -79,7 +79,7 @@ git init --bare
 cd ~
 ```
 
-Criando o repositório da aplicação
+##### Criando o repositório da aplicação
 
 ```
 mkdir -p ~/app_repo
@@ -90,14 +90,14 @@ git add . && git commit -m 'Initial'
 cd ~
 ```
 
-No seu computador local, adicione o bare como remoto:
+##### No seu computador local, adicione o bare como remoto:
 
 ```
 git remote add app_bare cursodjangoserver:~/app_bare
 git push app_bare <branch>
 ```
 
-No servidor, em app_repo, faça pull:
+##### No servidor, em app_repo, faça pull:
 
 ```
 cd ~/app_repo
@@ -114,4 +114,15 @@ python3.9 -m venv venv
 pip install -r requirements.txt
 pip install psycopg2
 pip install gunicorn
+```
+
+## Quando houver alterações no ambiente local
+
+##### No ambiente local
+
+```
+git add .
+git commit -m "a mensagem de commit"
+git push && git push app_bare master
+ssh marcu@34.173.97.144 'cd ~/app_repo ; git pull origin master ; sudo systemctl restart projeto_recipe'
 ```
