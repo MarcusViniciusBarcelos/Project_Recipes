@@ -2,10 +2,8 @@
 <div class="login-message">You are logged in with
     {{ user.username }}.
     <a href="{% url "authors:dashboard" %}">See your recipes</a> or
-    <form class="inline-form" action="{% url 'authors:logout' %}" method='POST' >
-        {% csrf_token %}
-        <input type="hidden" name= "username" value="{{ user.username }}">
-        <button class="plaintext-buton" type='submit'>Click here</button>
-    </form> to logout.
+    {% include "authors/partials/form_logout.html" %}
+    <a class="authors-logout-link" href="#">click here</a>
+    to logout.
 </div>
 {% endif %}
