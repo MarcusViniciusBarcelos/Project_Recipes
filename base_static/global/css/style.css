@@ -538,15 +538,13 @@ a {
 }
 
 .button-close-menu {
-    position: absolute;
-    top: 1rem;
-    right: -22rem;
     color: var(--color-white);
     background: none;
     border: none;
     font-size: 2rem;
-    z-index: 3;
     cursor: pointer;
+    padding: 1rem;
+    float: right;
 }
 
 .menu-nav {
