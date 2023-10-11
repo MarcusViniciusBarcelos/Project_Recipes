@@ -126,3 +126,12 @@ git commit -m "a mensagem de commit"
 git push && git push app_bare master
 ssh marcu@34.173.97.144 'cd ~/app_repo ; git pull origin master ; sudo systemctl restart projeto_recipe'
 ```
+
+## Quando houver alterações nos static files
+
+##### No servidor
+
+````
+python manage.py collectstatic
+sudo systemctl restart projeto_recipe
+````
