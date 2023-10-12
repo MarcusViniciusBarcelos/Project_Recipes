@@ -81,7 +81,7 @@ class Recipe(models.Model):
             image_pillow.close()
             return
 
-        new_height = round(new_width * original_height) / original_width
+        new_height = round((new_width * original_height) / original_width)
 
         new_image = image_pillow.resize((new_width, new_height), Image.LANCZOS)
 
@@ -110,7 +110,7 @@ class Recipe(models.Model):
         error_messages = defaultdict(list)
 
         recipe_from_db = Recipe.objects.filter(
-            title_iexact=self.title
+            title__iexact=self.title
         ).first()
 
         if recipe_from_db:
