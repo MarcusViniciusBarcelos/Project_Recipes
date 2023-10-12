@@ -1,13 +1,14 @@
 {% extends "global/base.html" %}
-{% block title %}DashBoard ({{ user }}) | {% endblock title %}
+{% load i18n %}
+{% block title %}{% translate "DashBoard" %} ({{ user }}) | {% endblock title %}
 
 {% block content %}
     <div class="main-content center container">
-        <h2>DashBoard ({{ user }})</h2>
+        <h2>{% translate "DashBoard" %} ({{ user }})</h2>
         {% include "authors/partials/login_message.html" %}
         {% include "global/partials/message.html" %}
         <div class="authors-dashboard-container">
-            <h3>Your Recipes</h3>
+            <h3>{% translate "Your Recipes" %}</h3>
 
             <ul>
                 {% for recipe in recipes %}
@@ -21,13 +22,13 @@
                     </li>
                 {% empty %}
                 <li>
-                    <p>You do not have recipes, please create one.</p>
+                    <p>{% translate "You do not have recipes, please create one." %}</p>
                 </li>
                 {% endfor %}
             </ul>
             <div class="button-new-recipe">
                 <div class="new-recipe">
-                    <a href="{% url "authors:new_recipe" %}">New Recipe</a>
+                    <a href="{% url "authors:new_recipe" %}">{% translate "New Recipe" %}</a>
                 </div>
             </div>
         </div>

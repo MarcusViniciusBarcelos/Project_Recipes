@@ -25,7 +25,7 @@ ssh IP_OU_HOST -i CAMINHO+NOME_DA_CHAVE
 
 ### Ao entrar no servidor
 
-##### A primeira coisa será atualizar tudo:
+##### A primeira coisa será atualizar tudo
 
 ```
 sudo apt update -y
@@ -90,14 +90,14 @@ git add . && git commit -m 'Initial'
 cd ~
 ```
 
-##### No seu computador local, adicione o bare como remoto:
+##### No seu computador local, adicione o bare como remoto
 
 ```
 git remote add app_bare cursodjangoserver:~/app_bare
 git push app_bare <branch>
 ```
 
-##### No servidor, em app_repo, faça pull:
+##### No servidor, em app_repo, faça pull
 
 ```
 cd ~/app_repo
@@ -134,4 +134,16 @@ ssh marcu@34.173.97.144 'cd ~/app_repo ; git pull origin master ; sudo systemctl
 ````
 python manage.py collectstatic
 sudo systemctl restart projeto_recipe
+````
+
+## Para traduções
+
+````
+python manage.py makemessages -l "pt_BR" -i 'venv'
+````
+
+##### apos fazer a tradução
+
+````
+python manage.py compilemessages -l "pt_BR" -i 'venv'
 ````
