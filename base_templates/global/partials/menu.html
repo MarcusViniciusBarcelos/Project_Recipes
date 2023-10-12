@@ -19,7 +19,7 @@
                 <a class="authors-logout-link" href="{% url "authors:logout" %}">{%translate 'Logout'%}</a>
                 {% include "authors/partials/form_logout.html" %}
             {% else %}
-                <a href="{% url "authors:login" %}"{%translate 'Login'%}</a>
+                <a href="{% url "authors:login" %}">Login</a>
                 <a href="{% url "authors:register" %}">{%translate 'Register'%}</a>
             {% endif %}
         </nav>
