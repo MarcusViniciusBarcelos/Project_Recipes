@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-12 14:53-0300\n"
+"POT-Creation-Date: 2023-10-12 18:21-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -78,10 +78,6 @@ msgstr "Receitas"
 msgid "There are errors in the form, please fix then and try again."
 msgstr "Há erros no formulário, corrija-os e tente novamente."
 
-#: .\base_templates\global\partials\form.html:35
-msgid "Send"
-msgstr "Enviar"
-
 #: .\base_templates\global\partials\menu.html:4
 msgid "Show Menu"
 msgstr "Mostrar Menu"
@@ -98,81 +94,77 @@ msgstr "Painel"
 msgid "Logout"
 msgstr "Sair"
 
-#: .\base_templates\global\partials\menu.html:22
-msgid "Login"
-msgstr "Conecte-se"
-
-#: .\recipes\models.py:21
+#: .\recipes\models.py:24
 msgid "title"
 msgstr "Titulo"
 
-#: .\recipes\models.py:24
+#: .\recipes\models.py:27
 msgid "description"
 msgstr "Descrição"
 
-#: .\recipes\models.py:26
+#: .\recipes\models.py:29
 msgid "slug"
 msgstr "Slug"
 
-#: .\recipes\models.py:27
+#: .\recipes\models.py:30
 #, fuzzy
 #| msgid "Preparation"
 msgid "preparation time"
 msgstr "Tempo de preparo"
 
-#: .\recipes\models.py:30
+#: .\recipes\models.py:33
 #, fuzzy
 #| msgid "Preparation"
 msgid "preparation time unit"
 msgstr "Unidade de tempo de preparo"
 
-#: .\recipes\models.py:32
+#: .\recipes\models.py:35
 #, fuzzy
 #| msgid "Servings"
 msgid "servings"
 msgstr "Porções"
 
-#: .\recipes\models.py:35
+#: .\recipes\models.py:38
 #, fuzzy
 #| msgid "Servings"
 msgid "servings unit"
 msgstr "Unidade de porções"
 
-#: .\recipes\models.py:37
+#: .\recipes\models.py:40
 #, fuzzy
 #| msgid "Preparation"
 msgid "preparation steps"
 msgstr "Modo de preparo"
 
-#: .\recipes\models.py:40
+#: .\recipes\models.py:43
 msgid "preparation steps is html"
 msgstr "modo de preparo é html"
 
-#: .\recipes\models.py:44
+#: .\recipes\models.py:47
 msgid "created at"
 msgstr "Criado às"
 
-#: .\recipes\models.py:48
+#: .\recipes\models.py:51
 msgid "updated at"
 msgstr "Atualizado às"
 
-#: .\recipes\models.py:51
+#: .\recipes\models.py:54
 msgid "is published"
 msgstr "Está publicado"
 
-#: .\recipes\models.py:55
+#: .\recipes\models.py:58
 msgid "cover"
 msgstr "Imagem"
 
-#: .\recipes\models.py:59
+#: .\recipes\models.py:62
 msgid "category"
 msgstr "Categoria"
 
-#: .\recipes\models.py:61
+#: .\recipes\models.py:64
 msgid "author"
 msgstr "Autor"
 
-#: .\recipes\models.py:63
+#: .\recipes\models.py:66
 msgid "tags"
 msgstr "Tags"
 
@@ -197,6 +189,12 @@ msgstr "Ver mais..."
 #: .\recipes\views.py:94
 msgid "Category"
 msgstr "Categoria"
+
+#~ msgid "Send"
+#~ msgstr "Enviar"
+
+#~ msgid "Login"
+#~ msgstr "Conecte-se"
 
 #, fuzzy
 #~| msgid "See your recipes"
