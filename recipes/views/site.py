@@ -10,7 +10,7 @@ from django.views.generic import DetailView, ListView
 from tag.models import Tag
 from utils.pagination import make_pagination
 
-from .models import Recipe
+from ..models import Recipe
 
 PER_PAGE = int(os.environ.get('PER_PAGE', 9))
 

@@ -92,7 +92,7 @@ class PaginationTest(RecipeTestBase):
     def test_pagination_loads_recipes(self):
         # need a recipe for this test
         for _ in range(30):
-            self.make_recipe(
+            recipe = self.make_recipe(
                 slug=f'test-pagination-{_}',
                 author_data={
                     'username': {_}

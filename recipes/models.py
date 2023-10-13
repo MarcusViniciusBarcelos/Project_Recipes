@@ -21,49 +21,42 @@ class Category(models.Model):
 
 
 class Recipe(models.Model):
-    title = models.CharField(max_length=65, verbose_name=_('title'))
+    title = models.CharField(max_length=65,)
     description = models.CharField(
         max_length=165,
-        verbose_name=_('description')
     )
-    slug = models.SlugField(unique=True, verbose_name=_('slug'))
-    preparation_time = models.IntegerField(verbose_name=_('preparation time'))
+    slug = models.SlugField(unique=True)
+    preparation_time = models.IntegerField()
     preparation_time_unit = models.CharField(
         max_length=65,
-        verbose_name=_('preparation time unit')
     )
-    servings = models.IntegerField(verbose_name=_('servings'))
+    servings = models.IntegerField()
     servings_unit = models.CharField(
         max_length=65,
-        verbose_name=_('servings unit')
     )
-    preparation_steps = models.TextField(verbose_name=_('preparation steps'))
+    preparation_steps = models.TextField()
     preparation_steps_is_html = models.BooleanField(
         default=False,
-        verbose_name=_('preparation steps is html')
     )
     created_at = models.DateTimeField(
         auto_now_add=True,
-        verbose_name=_('created at')
     )
     updated_at = models.DateTimeField(
         auto_now=True,
-        verbose_name=_('updated at')
     )
     is_published = models.BooleanField(
-        default=False, verbose_name=_('is published'))
+        default=False)
     cover = models.ImageField(
         upload_to='recipes/cover/%Y/%m/%d/',
         blank=True, default='',
-        verbose_name=_('cover')
     )
 
     category = models.ForeignKey(
-        Category, on_delete=models.SET_NULL, null=True, blank=True, default=None, verbose_name=_('category'))
+        Category, on_delete=models.SET_NULL, null=True, blank=True, default=None,)
     author = models.ForeignKey(
-        User, on_delete=models.SET_NULL, null=True, blank=True, default=None, verbose_name=_('author'))
+        User, on_delete=models.SET_NULL, null=True, blank=True, default=None,)
     tags = models.ManyToManyField(
-        Tag, blank=True, default='', verbose_name=_('tags'))
+        Tag, blank=True, default='',)
 
     def __str__(self):
         return self.title
@@ -104,7 +97,7 @@ class Recipe(models.Model):
                 except FileNotFoundError:
                     ...
 
-        return saved
+            return saved
 
     def clean(self, *args, **kwargs):
         error_messages = defaultdict(list)
