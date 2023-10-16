@@ -18,43 +18,36 @@ PER_PAGE = int(os.environ.get('PER_PAGE', 9))
 class RecipeListViewBase(ListView):
     model = Recipe
     context_object_name = 'recipes'
-    paginate_by = None
     ordering = ['-id']
     template_name = 'recipes/pages/home.html'
 
     def get_queryset(self, *args, **kwargs):
-        queryset = super().get_queryset(*args, **kwargs)
-        queryset = queryset.filter(
+        qs = super().get_queryset(*args, **kwargs)
+        qs = qs.filter(
             is_published=True,
         )
-        queryset = queryset.select_related(
-            'author',
-            'category',
-            'author__profile'
-        )
-        queryset = queryset.prefetch_related('tags')
-
-        return queryset
+        qs = qs.select_related('author', 'category', 'author__profile')
+        qs = qs.prefetch_related('tags')
+        return qs
 
     def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(*args, **kwargs)
+        ctx = super().get_context_data(*args, **kwargs)
         page_obj, pagination_range = make_pagination(
             self.request,
-            context.get('recipes'),
+            ctx.get('recipes'),
             PER_PAGE
         )
 
         html_language = translation.get_language()
 
-        context.update(
+        ctx.update(
             {
                 'recipes': page_obj,
                 'pagination_range': pagination_range,
                 'html_language': html_language,
             }
         )
-
-        return context
+        return ctx
 
 
 class RecipeListViewHome(RecipeListViewBase):
@@ -91,10 +84,21 @@ class RecipeListViewCategory(RecipeListViewBase):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        category_translation = _('Category')
-        context.update({
-            'title': f'{context.get("recipes")[0].category.name} - {category_translation}',
-        })
+        page_obj, pagination_range = make_pagination(
+            self.request,
+            context.get('recipes'),
+            PER_PAGE
+        )
+
+        html_language = translation.get_language()
+
+        context.update(
+            {
+                'recipes': page_obj,
+                'pagination_range': pagination_range,
+                'html_language': html_language,
+            }
+        )
 
         return context
 

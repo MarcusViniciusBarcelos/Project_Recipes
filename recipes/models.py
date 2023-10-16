@@ -1,5 +1,7 @@
 import os
+import string
 from collections import defaultdict
+from random import SystemRandom
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -37,7 +39,7 @@ class RecipeManager(models.Manager):
 
 class Recipe(models.Model):
     objects = RecipeManager()
-    title = models.CharField(max_length=65,)
+    title = models.CharField(max_length=65, verbose_name=_('Title'))
     description = models.CharField(
         max_length=165,
     )
@@ -72,7 +74,7 @@ class Recipe(models.Model):
     author = models.ForeignKey(
         User, on_delete=models.SET_NULL, null=True, blank=True, default=None,)
     tags = models.ManyToManyField(
-        Tag, blank=True, default='',)
+        Tag, blank=True, default=None,)
 
     def __str__(self):
         return self.title
@@ -102,8 +104,12 @@ class Recipe(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            slug = f'{slugify(self.title)}'
-            self.slug = slug
+            random_letters = ''.join(
+                SystemRandom().choices(
+                    string.ascii_letters + string.digits, k=5,
+                )
+            )
+            self.slug = slugify(f'{self.title}-{random_letters}')
 
             saved = super().save(*args, **kwargs)
 

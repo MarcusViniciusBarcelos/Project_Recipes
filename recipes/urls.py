@@ -18,12 +18,19 @@ urlpatterns = [
          name="recipe_api_v1_detail"),
     path(
         'recipes/api/v2/',
-        views.recipe_api_list,
+        views.RecipeAPIv2ViewSet.as_view({
+            'get': 'list',
+            'post': 'create',
+        }),
         name='recipes_api_v2',
     ),
     path(
         'recipes/api/v2/<int:pk>/',
-        views.recipe_api_detail,
+        views.RecipeAPIv2ViewSet.as_view({
+            'get': 'retrieve',
+            'patch': 'partial_update',
+            'delete': 'destroy',
+        }),
         name='recipes_api_v2_detail',
     ),
     path(

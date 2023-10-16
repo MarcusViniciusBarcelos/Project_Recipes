@@ -1,8 +1,6 @@
-from typing import Any
-
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import Http404
+from django.http.response import Http404
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.decorators import method_decorator
@@ -17,6 +15,15 @@ from recipes.models import Recipe
     name='dispatch'
 )
 class DashboardRecipe(View):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def setup(self, *args, **kwargs):
+        return super().setup(*args, **kwargs)
+
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
     def get_recipe(self, id=None):
         recipe = None
 
@@ -37,7 +44,7 @@ class DashboardRecipe(View):
             self.request,
             'authors/pages/dashboard_recipe.html',
             context={
-                'form': form,
+                'form': form
             }
         )
 
@@ -55,7 +62,7 @@ class DashboardRecipe(View):
         )
 
         if form.is_valid():
-            # agora o form é valido e eu posso tentar salvar
+            # Agora, o form é válido e eu posso tentar salvar
             recipe = form.save(commit=False)
 
             recipe.author = request.user
@@ -65,7 +72,13 @@ class DashboardRecipe(View):
             recipe.save()
 
             messages.success(request, 'Sua receita foi salva com sucesso!')
-            return redirect(reverse('authors:dashboard_recipe_edit', args=(recipe.id,)))
+            return redirect(
+                reverse(
+                    'authors:dashboard_recipe_edit', args=(
+                        recipe.id,
+                    )
+                )
+            )
 
         return self.render_recipe(form)
 
@@ -78,5 +91,5 @@ class DashboardRecipeDelete(DashboardRecipe):
     def post(self, *args, **kwargs):
         recipe = self.get_recipe(self.request.POST.get('id'))
         recipe.delete()
-        messages.success(self.request, 'Receita excluida com sucesso!')
+        messages.success(self.request, 'Deleted successfully.')
         return redirect(reverse('authors:dashboard'))
