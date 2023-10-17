@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http.response import Http404
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views import View
@@ -37,7 +37,7 @@ class DashboardRecipe(View):
             if not recipe:
                 raise Http404()
 
-        return recipe
+        return get_object_or_404(Recipe, id=id)
 
     def render_recipe(self, form):
         return render(
@@ -68,8 +68,9 @@ class DashboardRecipe(View):
             recipe.author = request.user
             recipe.preparation_steps_is_html = False
             recipe.is_published = False
-
             recipe.save()
+
+            recipe.save_m2m()
 
             messages.success(request, 'Sua receita foi salva com sucesso!')
             return redirect(

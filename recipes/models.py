@@ -72,15 +72,15 @@ class Recipe(models.Model):
     category = models.ForeignKey(
         Category, on_delete=models.SET_NULL, null=True, blank=True, default=None,)
     author = models.ForeignKey(
-        User, on_delete=models.SET_NULL, null=True, blank=True, default=None,)
+        User, on_delete=models.SET_NULL, null=True)
     tags = models.ManyToManyField(
-        Tag, blank=True, default=None,)
+        Tag, blank=True, default='')
 
     def __str__(self):
         return self.title
 
     def get_absolute_url(self):
-        return reverse("recipes:recipe", args=((self.pk,)))
+        return reverse("recipes:recipe", args=((self.pk)))
 
     @staticmethod
     def resize_image(image, new_width=800):
@@ -104,22 +104,23 @@ class Recipe(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            random_letters = ''.join(
+            rand_letters = ''.join(
                 SystemRandom().choices(
-                    string.ascii_letters + string.digits, k=5,
+                    string.ascii_letters + string.digits,
+                    k=5,
                 )
             )
-            self.slug = slugify(f'{self.title}-{random_letters}')
+            self.slug = slugify(f'{self.title}-{rand_letters}')
 
-            saved = super().save(*args, **kwargs)
+        saved = super().save(*args, **kwargs)
 
-            if self.cover:
-                try:
-                    self.resize_image(self.cover, 840)
-                except FileNotFoundError:
-                    ...
+        if self.cover:
+            try:
+                self.resize_image(self.cover, 840)
+            except FileNotFoundError:
+                ...
 
-            return saved
+        return saved
 
     def clean(self, *args, **kwargs):
         error_messages = defaultdict(list)
