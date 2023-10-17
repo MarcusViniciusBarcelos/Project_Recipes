@@ -6,6 +6,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # django rest framework
+    'rest_framework_simplejwt',
     "rest_framework",
     # meus apps
     "recipes",
