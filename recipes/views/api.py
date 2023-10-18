@@ -23,6 +23,7 @@ class RecipeAPIv2ViewSet(ModelViewSet):
     serializer_class = RecipeSerializer
     pagination_class = PageNumberPagination
     permission_classes = [IsAuthenticatedOrReadOnly, ]
+    http_method_names = ["GET", "POST", "OPTIONS", "HEAD", "PATCH", "DELETE"]
 
     def get_serializer_class(self):
         return super().get_serializer_class()
@@ -37,7 +38,6 @@ class RecipeAPIv2ViewSet(ModelViewSet):
 
     def get_queryset(self):
         qs = super().get_queryset()
-
         category_id = self.request.query_params.get(  # type: ignore
             'category_id',
             ''
@@ -51,7 +51,7 @@ class RecipeAPIv2ViewSet(ModelViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save(author=request.user, is_published=True, category_id=3)
+        serializer.save(author=request.user)
         headers = self.get_success_headers(serializer.data)
         return Response(
             serializer.data,

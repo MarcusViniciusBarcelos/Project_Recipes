@@ -1,8 +1,11 @@
 from django.urls import path
+from rest_framework.routers import SimpleRouter
 
 from . import views
 
 app_name = 'authors'
+author_api_router = SimpleRouter()
+author_api_router.register('api', views.AuthorViewSet, basename='author_api')
 
 urlpatterns = [
     path('register/', views.register_view, name='register'),
@@ -28,3 +31,4 @@ urlpatterns = [
         name='profile'
     ),
 ]
+urlpatterns += author_api_router.urls
