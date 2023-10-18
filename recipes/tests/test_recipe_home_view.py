@@ -39,7 +39,7 @@ class RecipeHomeViewTest(RecipeTestBase):
         content = response.content.decode('utf-8')
         response_context_recipes = response.context['recipes']
 
-        self.assertIn('Recipe title', content)
+        self.assertIn('Recipe Title', content)
         self.assertEqual(len(response_context_recipes), 1)
 
     def test_recipe_home_template_dont_load_recipes_not_published(self):
@@ -56,7 +56,7 @@ class RecipeHomeViewTest(RecipeTestBase):
         # need recipes for this test
         self.make_recipe_in_batch(qtd=8)
 
-        with patch('recipes.site.PER_PAGE', new=3):
+        with patch('recipes.views.site.PER_PAGE', new=3):
             response = self.client.get(reverse('recipes:home'))
             recipes = response.context['recipes']
             paginator = recipes.paginator
