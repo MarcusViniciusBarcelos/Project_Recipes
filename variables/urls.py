@@ -16,5 +16,7 @@ urlpatterns = [
         {'get': 'retrieve', 'patch': 'partial_update', 'delete': 'destroy'}), name='variable-values-detail'),
     path('rules/', RulesListView.as_view({'get': 'retrieve',
          'patch': 'partial_update', 'delete': 'destroy'}), name='rules-list'),
+    path('variables/<int:variables_id>/values/add/', ValuesListView.as_view(
+        {'post': 'add_value_to_variable'}), name='add-value-to-variable'),
     path('', include(router.urls)),
 ]
