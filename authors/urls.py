@@ -4,6 +4,8 @@ from rest_framework.routers import SimpleRouter
 from . import views
 
 app_name = 'authors'
+
+
 author_api_router = SimpleRouter()
 author_api_router.register('api', views.AuthorViewSet, basename='author_api')
 
@@ -14,7 +16,8 @@ urlpatterns = [
     path('login/create/', views.login_create, name='login_create'),
     path('logout/', views.logout_view, name='logout'),
     path('dashboard/', views.dashboard, name='dashboard'),
-    path('dashboard/recipe/new', views.DashboardRecipe.as_view(), name='new_recipe'),
+    path('dashboard/recipe/new/',
+         views.DashboardRecipeNew.as_view(), name='new_recipe'),
     path(
         'dashboard/recipe/delete/',
         views.DashboardRecipeDelete.as_view(),
@@ -22,13 +25,14 @@ urlpatterns = [
     ),
     path(
         'dashboard/recipe/<int:id>/edit/',
-        views.DashboardRecipe.as_view(),
+        views.DashboardRecipeEdit.as_view(),
         name='dashboard_recipe_edit'
     ),
     path(
-        'profile/<int:id>',
+        'profile/<int:id>/',
         views.ProfileView.as_view(),
         name='profile'
     ),
 ]
+
 urlpatterns += author_api_router.urls
