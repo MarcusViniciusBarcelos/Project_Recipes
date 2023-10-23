@@ -13,12 +13,19 @@ class ValuesListView(ModelViewSet):
 
     def post(self, request, variables_id):
         variables = get_object_or_404(Variables, id=variables_id)
-        request.data['variables'] = variables.id
+        request.data['variables'] = variables.pk
         serializer = ValuesSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(variables=variables)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def list(self, request, *args, **kwargs):
+        variables = get_object_or_404(Variables, id=kwargs['variables_id'])
+        queryset = self.filter_queryset(
+            self.get_queryset().filter(variables=variables))
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class VariablesListView(ModelViewSet):
