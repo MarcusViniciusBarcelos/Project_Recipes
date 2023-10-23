@@ -14,4 +14,5 @@ INSTALLED_APPS = [
     "recipes",
     "authors",
     "tag",
+    "variables",
 ]

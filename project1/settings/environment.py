@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-from utils.enviroment import get_env_variable, parse_comma_sep_str_to_list
+from utils.environment import get_env_variable, parse_comma_sep_str_to_list
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
