@@ -1,71 +1,77 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import status
-from rest_framework.decorators import action
+from rest_framework.generics import RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.views import APIView
 
-from .models import Rules, Values, Variables
-from .serializer import RulesSerializer, ValuesSerializer, VariablesSerializer
-
-
-class ValuesListView(ModelViewSet):
-    queryset = Values.objects.all()
-    serializer_class = ValuesSerializer
-
-    def post(self, request, variables_id):
-        variables = get_object_or_404(Variables, id=variables_id)
-        request.data['variables'] = variables.pk
-        serializer = ValuesSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save(variables=variables)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def list(self, request, *args, **kwargs):
-        # Use 'kwargs.get' para obter o valor do parâmetro sem causar KeyError
-        variables_id = kwargs.get('variables_id')
-
-        if variables_id is not None:
-            variables = get_object_or_404(Variables, id=variables_id)
-            queryset = self.filter_queryset(
-                self.get_queryset().filter(variables=variables))
-            serializer = self.get_serializer(queryset, many=True)
-            return Response(serializer.data)
-        else:
-            # Se 'variables_id' não estiver presente, pode ser um erro de configuração
-            return Response({'error': 'Missing "variables_id" parameter'}, status=status.HTTP_400_BAD_REQUEST)
-
-    @action(detail=False, methods=['post'])
-    def add_value_to_variable(self, request, variables_id):
-        variables = get_object_or_404(Variables, id=variables_id)
-        serializer = self.get_serializer(data=request.data)
-
-        if serializer.is_valid():
-            serializer.save(variables=variables)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+from .models import Questions, Rules
+from .serializer import QuestionsSerializer, RulesSerializer
 
 
-class VariablesListView(ModelViewSet):
-    queryset = Variables.objects.all()
-    serializer_class = VariablesSerializer
+class QuestionsList(APIView):
+    def get(self, request):
+        questions = Questions.objects.all()
+        serializer = QuestionsSerializer(questions, many=True)
+        return Response(serializer.data)
 
     def post(self, request):
-        serializer = VariablesSerializer(data=request.data)
+        serializer = QuestionsSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class RulesListView(ModelViewSet):
+class RulesList(APIView):
+    def get(self, request):
+        rules = Rules.objects.all()
+        serializer = RulesSerializer(rules, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        # Extrai IDs das perguntas do payload
+        questions_ids = request.data.pop('questions', [])
+
+        # Cria a regra sem associar perguntas
+        serializer = RulesSerializer(data=request.data)
+        if serializer.is_valid():
+            rule = serializer.save()
+
+            # Associa as perguntas à regra pelos IDs fornecidos
+            for question_id in questions_ids:
+                question = get_object_or_404(Questions, pk=question_id)
+                rule.questions.add(question)
+
+            # Atualiza o serializer da regra para incluir as perguntas
+            updated_serializer = RulesSerializer(rule)
+            return Response(updated_serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class QuestionDetailView(RetrieveUpdateDestroyAPIView):
+    queryset = Questions.objects.all()
+    serializer_class = QuestionsSerializer
+
+    def patch(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', True)
+        instance = self.get_object()
+        serializer = self.get_serializer(
+            instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
+
+
+class RuleDetailView(RetrieveUpdateDestroyAPIView):
     queryset = Rules.objects.all()
     serializer_class = RulesSerializer
 
-    def post(self, request):
-        serializer = RulesSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def patch(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', True)
+        instance = self.get_object()
+        serializer = self.get_serializer(
+            instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)

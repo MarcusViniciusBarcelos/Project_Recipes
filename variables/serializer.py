@@ -1,27 +1,17 @@
 from rest_framework import serializers
 
-from .models import Rules, Values, Variables
+from .models import Questions, Rules
 
 
-class VariablesSerializer(serializers.ModelSerializer):
+class QuestionsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Variables
-        fields = ('id', 'name')
-
-
-class ValuesSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Values
-        fields = ('id', 'name', 'variables')
+        model = Questions
+        fields = ['id', 'title', 'answer']
 
 
 class RulesSerializer(serializers.ModelSerializer):
+    questions = QuestionsSerializer(many=True, read_only=True)
+
     class Meta:
         model = Rules
-        fields = ('id', 'name', 'description', 'variable', 'variable_object')
-
-    variable_object = VariablesSerializer(many=True, read_only=True)
-    variable = serializers.SerializerMethodField()
-
-    def get_variable(self, obj):
-        return f'{obj.variable.name} {", ".join([value.name for value in obj.variable.values.all()])}'
+        fields = ['id', 'name', 'questions', 'result']
