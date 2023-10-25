@@ -13,7 +13,8 @@ class Questions(models.Model):
 
 class Rules(models.Model):
     name = models.CharField(max_length=150)
-    questions = models.ManyToManyField(Questions, blank=True, default=None, )
+    questions = models.ManyToManyField(
+        Questions, through='RulesQuestions', blank=True, )
     result = models.CharField(max_length=250)
 
     def __str__(self):
@@ -25,4 +26,4 @@ class RulesQuestions(models.Model):
     question = models.ForeignKey(Questions, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.rule.name + ' - ' + self.question.title
+        return '{} - {}'.format(self.rule.name, self.question.title)
