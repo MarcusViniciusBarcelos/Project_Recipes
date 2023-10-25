@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import QuestionDetailView, QuestionsList, RuleDetailView, RulesList
+from .views import *
 
 app_name = 'especialista'
 
