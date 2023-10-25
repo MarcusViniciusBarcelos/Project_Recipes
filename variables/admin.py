@@ -19,6 +19,6 @@ class RulesAdmin(admin.ModelAdmin):
     list_per_page = 25
 
 
-class RulesQuestionsInline(admin.TabularInline):
-    model = RulesQuestions
-    extra = 1
+@admin.register(RulesQuestions)
+class RulesQuestionsInline(admin.ModelAdmin):
+    ...
