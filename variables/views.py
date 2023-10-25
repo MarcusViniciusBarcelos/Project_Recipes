@@ -3,13 +3,12 @@ from rest_framework import status
 from rest_framework.generics import RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.viewsets import ModelViewSet
 
 from .models import Questions, Rules
 from .serializer import QuestionsSerializer, RulesSerializer
 
 
-class QuestionsList(ModelViewSet):
+class QuestionsList(APIView):
     def get(self, request):
         questions = Questions.objects.all()
         serializer = QuestionsSerializer(questions, many=True)
@@ -23,25 +22,38 @@ class QuestionsList(ModelViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class RulesList(ModelViewSet):
+class RulesList(APIView):
     def get(self, request):
         rules = Rules.objects.all()
         serializer = RulesSerializer(rules, many=True)
         return Response(serializer.data)
 
     def post(self, request):
-        # Extrai IDs das perguntas do payload
-        questions_ids = request.data.pop('questions', [])
-
-        # Cria a regra sem associar perguntas
+        # Cria o serializer da regra com dados do payload
         serializer = RulesSerializer(data=request.data)
         if serializer.is_valid():
+            # Salva a regra
             rule = serializer.save()
 
-            # Associa as perguntas à regra pelos IDs fornecidos
-            for question_id in questions_ids:
-                question = get_object_or_404(Questions, pk=question_id)
-                rule.questions.add(question)
+            # Atualiza a regra com as perguntas fornecidas
+            for question_data in request.data.get('questions', []):
+                # Verifica se a pergunta já existe
+                existing_question = Questions.objects.filter(
+                    title=question_data['title']).first()
+
+                if existing_question:
+                    # Se a pergunta já existe, apenas a associa à regra
+                    rule.questions.add(existing_question)
+                else:
+                    # Se a pergunta não existe, cria uma nova e a associa à regra
+                    question_serializer = QuestionsSerializer(
+                        data=question_data)
+                    if question_serializer.is_valid():
+                        question = question_serializer.save()
+                        rule.questions.add(question)
+                    else:
+                        # Se a validação falhar, retorne os erros de validação
+                        return Response(question_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
             # Atualiza o serializer da regra para incluir as perguntas
             updated_serializer = RulesSerializer(rule)
@@ -50,7 +62,7 @@ class RulesList(ModelViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class QuestionDetailView(ModelViewSet):
+class QuestionDetailView(RetrieveUpdateDestroyAPIView):
     queryset = Questions.objects.all()
     serializer_class = QuestionsSerializer
 
@@ -64,7 +76,7 @@ class QuestionDetailView(ModelViewSet):
         return Response(serializer.data)
 
 
-class RuleDetailView(ModelViewSet):
+class RuleDetailView(RetrieveUpdateDestroyAPIView):
     queryset = Rules.objects.all()
     serializer_class = RulesSerializer
 

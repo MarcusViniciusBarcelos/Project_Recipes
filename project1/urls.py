@@ -28,13 +28,5 @@ urlpatterns = [
     path('__debug__/', include('debug_toolbar.urls')),
     path('especialista/', include('variables.urls')),
 ]
-
-urlpatterns += [
-    path('questions/', QuestionsList.as_view(), name='questions-list'),
-    path('rules/', RulesList.as_view(), name='rules-list'),
-    path('questions/<int:pk>/', QuestionDetailView.as_view(), name='question-detail'),
-    path('rules/<int:pk>/', RuleDetailView.as_view(), name='rule-detail'),
-]
-
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
