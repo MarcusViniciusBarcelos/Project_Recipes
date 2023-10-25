@@ -35,7 +35,7 @@ class RulesList(APIView):
             # Salva a regra
             rule = serializer.save()
 
-            # Atualiza a regra com as perguntas fornecidas
+            # Atualiza a regra com as perguntas fornecidas no payload
             for question_data in request.data.get('questions', []):
                 # Verifica se a pergunta já existe
                 existing_question = Questions.objects.filter(
