@@ -17,8 +17,3 @@ class RulesAdmin(admin.ModelAdmin):
     search_fields = ('name', 'questions__title')
     list_filter = ('questions',)
     list_per_page = 250
-
-
-@admin.register(RulesQuestions)
-class RulesQuestionsInline(admin.ModelAdmin):
-    ...
