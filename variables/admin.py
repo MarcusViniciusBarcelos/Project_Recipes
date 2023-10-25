@@ -16,7 +16,7 @@ class RulesAdmin(admin.ModelAdmin):
     list_display_links = ('id', 'name')
     search_fields = ('name', 'questions__title')
     list_filter = ('questions',)
-    list_per_page = 25
+    list_per_page = 250
 
 
 @admin.register(RulesQuestions)
