@@ -3,10 +3,6 @@ from django.contrib import admin
 from .models import Questions, Rules
 
 
-class QuestionsInline(admin.TabularInline):
-    model = Rules.questions.through
-
-
 @admin.register(Questions)
 class QuestionsAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'answer')
@@ -21,4 +17,3 @@ class RulesAdmin(admin.ModelAdmin):
     search_fields = ('name', 'questions__title')
     list_filter = ('questions',)
     list_per_page = 25
-    inlines = [QuestionsInline]
