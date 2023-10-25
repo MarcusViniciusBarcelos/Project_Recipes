@@ -1,12 +1,7 @@
-from utils.environment import get_env_variable, parse_comma_sep_str_to_list
 import os
 from pathlib import Path
 
-from django import setup
-
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project1.settings')
-setup()
-
+from utils.environment import get_env_variable, parse_comma_sep_str_to_list
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
