@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Questions, Rules
+from .models import *
 
 
 @admin.register(Questions)
@@ -17,3 +17,8 @@ class RulesAdmin(admin.ModelAdmin):
     search_fields = ('name', 'questions__title')
     list_filter = ('questions',)
     list_per_page = 25
+
+
+class RulesQuestionsInline(admin.TabularInline):
+    model = RulesQuestions
+    extra = 1
