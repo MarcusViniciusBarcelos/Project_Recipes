@@ -3,12 +3,13 @@ from rest_framework import status
 from rest_framework.generics import RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet
 
 from .models import Questions, Rules
 from .serializer import QuestionsSerializer, RulesSerializer
 
 
-class QuestionsList(APIView):
+class QuestionsList(ModelViewSet):
     def get(self, request):
         questions = Questions.objects.all()
         serializer = QuestionsSerializer(questions, many=True)
@@ -22,7 +23,7 @@ class QuestionsList(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class RulesList(APIView):
+class RulesList(ModelViewSet):
     def get(self, request):
         rules = Rules.objects.all()
         serializer = RulesSerializer(rules, many=True)
@@ -49,7 +50,7 @@ class RulesList(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class QuestionDetailView(RetrieveUpdateDestroyAPIView):
+class QuestionDetailView(ModelViewSet):
     queryset = Questions.objects.all()
     serializer_class = QuestionsSerializer
 
@@ -63,7 +64,7 @@ class QuestionDetailView(RetrieveUpdateDestroyAPIView):
         return Response(serializer.data)
 
 
-class RuleDetailView(RetrieveUpdateDestroyAPIView):
+class RuleDetailView(ModelViewSet):
     queryset = Rules.objects.all()
     serializer_class = RulesSerializer
 
